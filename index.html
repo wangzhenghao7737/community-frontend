@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>System</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <h2>System</h2>
+      <ul>
+        <li data-page="notice.html">Announcement</li>
+        <li data-page="forum.html">Forum</li>
+        <li data-page="rent.html">Rental</li>
+        <li data-page="profile.html">Home</li>
+        <li id="logout">Logout</li>
+      </ul>
+    </nav>
+    <main class="content">
+      <iframe id="main-frame" src="pages/notice.html" frameborder="0"></iframe>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    if(!localStorage.getItem("username")){
+      window.location.href = "login.html"
+    }
+    let username = localStorage.getItem("username")
+    let id = localStorage.getItem("id")
+    alert("welcome!"+username)
+
+    let logout = document.getElementById("logout")
+    logout.addEventListener("click",function(event){
+      event.preventDefault();
+      if(confirm("Exit?")){
+        localStorage.clear()
+        window.location.href = "login.html"
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>房屋租赁</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f9fc;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1E90FF;
+      margin-bottom: 30px;
+    }
+
+    .search-bar {
+      max-width: 800px;
+      margin: 0 auto 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-bar input[type="text"] {
+      width: 70%;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .search-bar button {
+      width: 20%;
+      padding: 8px;
+      background-color: #1E90FF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .search-bar button:hover {
+      background-color: #147acb;
+    }
+
+    .rent-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .rent-item {
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .rent-item img {
+      width: 100%;
+      border-radius: 8px;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    .rent-item h3 {
+      font-size: 18px;
+      color: #333;
+    }
+
+    .rent-item .info {
+      margin-bottom: 12px;
+    }
+
+    .info span {
+      display: inline-block;
+      width: 45%;
+      font-weight: bold;
+      color: #444;
+    }
+
+    .info .value {
+      color: #666;
+    }
+
+    .rent-item .contact {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .contact a {
+      background-color: #1E90FF;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .contact a:hover {
+      background-color: #147acb;
+    }
+
+    .pagination {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .pagination button {
+      padding: 8px 16px;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    .pagination button:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>房屋租赁</h1>
+
+  <!-- 搜索框 -->
+  <div class="search-bar">
+    <input type="text" placeholder="搜索房源...">
+    <button>搜索</button>
+  </div>
+
+  <!-- 房屋租赁列表 -->
+  <div class="rent-list">
+    <div class="rent-item">
+      <img src="../resource/house.jpeg" alt="户型图片">
+      <h3>2室1厅精装修</h3>
+      <div class="info">
+        <span>家具/家电：         &nbsp;</span><span class="value">全配（空调、冰箱、洗衣机）</span><br>
+        <span>价格：</span><span class="value">¥3000/月</span><br>
+        <span>租赁时间：</span><span class="value">2025年5月 - 2026年5月</span><br>
+        <span>房主联系方式：</span><span class="value">138****8888</span>
+      </div>
+      <div class="contact">
+        <a href="tel:138****8888">联系房主</a>
+      </div>
+    </div>
+
+    <div class="rent-item">
+      <img src="../resource/house.jpeg" alt="户型图片">
+      <h3>3室2厅独立公寓</h3>
+      <div class="info">
+        <span>家具/家电：</span><span class="value">全配（空调、冰箱、洗衣机、电视）</span><br>
+        <span>价格：</span><span class="value">¥5000/月</span><br>
+        <span>租赁时间：</span><span class="value">2025年6月 - 2026年6月</span><br>
+        <span>房主联系方式：</span><span class="value">139****7777</span>
+      </div>
+      <div class="contact">
+        <a href="tel:139****7777">联系房主</a>
+      </div>
+    </div>
+
+    <div class="rent-item">
+      <img src="../resource/house.jpeg" alt="户型图片">
+      <h3>1室1厅小户型</h3>
+      <div class="info">
+        <span>家具/家电：</span><span class="value">家具齐全（空调、冰箱）</span><br>
+        <span>价格：</span><span class="value">¥2000/月</span><br>
+        <span>租赁时间：</span><span class="value">2025年4月 - 2026年4月</span><br>
+        <span>房主联系方式：</span><span class="value">137****6666</span>
+      </div>
+      <div class="contact">
+        <a href="tel:137****6666">联系房主</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 分页 -->
+  <div class="pagination">
+    <button>上一页</button>
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>下一页</button>
+  </div>
+  <script>
+    alert("rent")
+  </script>
+</body>
+</html>

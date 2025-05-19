@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>发表评论</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f9fc;
+      padding: 30px;
+      color: #333;
+    }
+
+    h1 {
+      color: #1E90FF;
+      margin-bottom: 20px;
+    }
+
+    .post-preview {
+      background-color: #e8f1fb;
+      padding: 15px;
+      border-left: 4px solid #1E90FF;
+      border-radius: 6px;
+      margin-bottom: 25px;
+    }
+
+    .post-preview h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .meta {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .content {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+
+    textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      background-color: #1E90FF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      background-color: #147acb;
+    }
+
+    .back-btn {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #1E90FF;
+      font-size: 16px;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>发表评论</h1>
+
+  <!-- 模拟帖子的预览部分 -->
+  <div class="post-preview">
+    <h2>小区电瓶车停放规范讨论</h2>
+    <div class="meta">发帖人：李四 | 日期：2025-04-15</div>
+    <div class="content">
+      最近小区电瓶车乱停放问题严重，有没有可能规划一下车棚位置？
+    </div>
+  </div>
+
+  <!-- 评论表单 -->
+  <form>
+    <label for="author">您的昵称</label>
+    <input type="text" id="author" placeholder="请输入您的昵称">
+
+    <label for="comment">评论内容</label>
+    <textarea id="comment" placeholder="请输入评论内容..."></textarea>
+
+    <button class="submit-btn">提交评论</button>
+  </form>
+
+  <!-- 返回按钮 -->
+  <a href="forum.html" class="back-btn">← 返回论坛</a>
+
+</body>
+</html>

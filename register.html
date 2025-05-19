@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>registration</title>
+  <style>
+    body {
+      background-color: #f0f4f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+    .register-box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+    .register-box h2 {
+      color: #1E90FF;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #1E90FF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .login-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+  <script src="axios/axios.min.js"></script>
+  <script src="config/api.js"></script>
+</head>
+<body>
+  <div class="register-box">
+    <h2>Registration</h2>
+    <form>
+      <input id="username" type="text" placeholder="username">
+      <input id="pwd" type="password" placeholder="password">
+      <input id="pwd-check" type="password" placeholder="check password">
+      <button id="but">register</button>
+    </form>
+    <div class="login-link">
+      <p>Already hava an account?<a href="login.html">back to login</a></p>
+    </div>
+  </div>
+  <script type="module">
+    import {isEmpty} from './utils/str.js'
+    let username = document.getElementById("username")
+    let pwd = document.getElementById("pwd")
+    let pwdCheck = document.getElementById("pwd-check")
+    let but = document.getElementById("but")
+    but.addEventListener("click",function(event){
+        if(isEmpty(username.value) || isEmpty(pwd.value)||isEmpty(pwdCheck.value)){
+          alert("Input your username and password")
+          return
+        }
+        if(pwd.value !== pwdCheck.value){
+          alert("Please check your password")
+          return
+        }
+        event.preventDefault();
+        const data = {
+          username: username.value,
+          password: pwd.value,
+        };
+        axios.post(API_USER.register, data, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+          if(response.data.code === 1){
+            localStorage.clear()
+            alert("Register successfully!")
+            window.location.href = "login.html"
+          }
+          else{
+            alert(response.data.message)
+          }
+        })
+        .catch(error => {
+          alert("service error, please wait for 10 mins")
+        });
+    })
+  </script>
+</body>
+</html>

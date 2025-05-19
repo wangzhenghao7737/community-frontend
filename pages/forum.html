@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>社区论坛</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      color: #1E90FF;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .search-bar button {
+      padding: 8px 16px;
+      background-color: #1E90FF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .post {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+
+    .post h3 {
+      margin: 0;
+      color: #1E90FF;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: #666;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+
+    .post-content {
+      color: #444;
+      margin-bottom: 10px;
+    }
+
+    .toggle-btn {
+      background-color: #1E90FF;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .comments {
+      display: none;
+      margin-top: 10px;
+      padding-left: 10px;
+      border-left: 2px solid #ccc;
+    }
+
+    .comments p {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    .pagination {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .pagination button {
+      padding: 8px 12px;
+      margin: 0 5px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .pagination button.active {
+      background-color: #1E90FF;
+      color: white;
+      border-color: #1E90FF;
+    }
+
+    .pagination button:hover:not(.active) {
+      background-color: #e0e0e0;
+    }
+    .comment-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: #00bfff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  .comment-btn:hover {
+    background-color: #1c9ccf;
+  }
+  .post-btn {
+    display: inline-block;
+    background-color: #1E90FF;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+
+  .post-btn:hover {
+    background-color: #157acb;
+  }
+  </style>
+</head>
+<body>
+
+  <h1>社区论坛</h1>
+
+  <!-- 🔍 搜索 -->
+  <div class="search-bar">
+    <input type="text" placeholder="搜索帖子标题或内容...">
+    <button>搜索</button>
+  </div>
+
+  <!-- 📝 帖子1 -->
+  <div class="post">
+    <h3>小区电瓶车停放规范讨论</h3>
+    <div class="meta">发起者：李四 | 日期：2025-04-15 | 阅读：142次</div>
+    <div class="post-content">
+      最近小区电瓶车乱停放问题严重，有没有可能规划一下车棚位置？
+    </div>
+    <button class="toggle-btn" onclick="toggleComments(this)">展开评论</button>
+    <div class="comments">
+      <p><strong>张三：</strong>支持！我家楼下都快没法走了。</p>
+      <p><strong>王五：</strong>可以找物业沟通一下，我之前提过几次。</p>
+    </div>
+    <a href="new_post.html" class="comment-btn">发评论</a>
+  </div>
+
+  <!-- 📝 帖子2 -->
+  <div class="post">
+    <h3>楼道灯坏了</h3>
+    <div class="meta">发起者：王小美 | 日期：2025-04-12 | 阅读：78次</div>
+    <div class="post-content">
+      三单元2楼楼道灯已经坏好几天了，晚上出门不安全，物业能快点修吗？
+    </div>
+    <button class="toggle-btn" onclick="toggleComments(this)">展开评论</button>
+    <div class="comments">
+      <p><strong>管理员：</strong>收到，今天下午安排维修。</p>
+    </div>
+    <a href="new_post.html" class="comment-btn">发评论</a>
+  </div>
+
+  <!-- 📄 分页 -->
+  <div class="pagination">
+    <button>&laquo; 上一页</button>
+    <button class="active">1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>下一页 &raquo;</button>
+    <a href="create_post.html" class="post-btn">➕ 发新帖</a>
+
+  </div>
+
+  <script>
+    function toggleComments(button) {
+      const commentBox = button.nextElementSibling;
+      const isVisible = commentBox.style.display === "block";
+      commentBox.style.display = isVisible ? "none" : "block";
+      button.textContent = isVisible ? "展开评论" : "折叠评论";
+    }
+  </script>
+  <script>
+    alert("forum")
+  </script>
+</body>
+</html>

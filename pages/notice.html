@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Announcement</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      color: #1E90FF;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .search-bar button {
+      padding: 8px 16px;
+      background-color: #1E90FF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .notice {
+      border-bottom: 1px solid #ccc;
+      padding: 15px 0;
+    }
+
+    .notice h3 {
+      color: #1E90FF;
+      margin-bottom: 5px;
+    }
+
+    .notice p.content {
+      color: #444;
+    }
+
+    .notice .meta {
+      font-size: 13px;
+      color: #777;
+      margin-top: 5px;
+    }
+
+    .pagination {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .pagination button {
+      padding: 8px 12px;
+      margin: 0 5px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .pagination button.active {
+      background-color: #1E90FF;
+      color: white;
+      border-color: #1E90FF;
+    }
+
+    .pagination button:hover:not(.active) {
+      background-color: #e0e0e0;
+    }
+    .post-btn {
+      display: inline-block;
+      background-color: #1E90FF;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+
+    .post-btn:hover {
+      background-color: #157acb;
+    }
+  </style>
+  <script src="../config/api.js"></script>
+  <script src="../axios/axios.min.js"></script>
+</head>
+<body>
+
+  <h1>Announcement</h1>
+
+  <!-- 🔍 搜索框 -->
+  <div class="search-bar">
+    <input id="anno_key" type="text" placeholder="search by key words...">
+    <button id="anno_search">search</button>
+  </div>
+
+ <div id="notices-container">
+
+ </div>
+
+  <!--  分页按钮 -->
+  <div class="pagination">
+    <button id="anno_but_last">&laquo; next page</button>
+    <button id="anno_page" class="active">1</button>
+    <button id="anno_but_next">last page &raquo;</button>
+    <a id="anno_create" ref="create_post.html" class="post-btn">create</a>
+  </div>
+  <script type="module">
+    import {isEmpty} from '../utils/str.js'
+    let annoNowPage = 1
+    let annoMaxPage = 1
+    let annoPageSize = 4
+   
+    
+    let annoContainer = document.getElementById("notices-container")
+    let annoKey = document.getElementById("anno_key")
+    let annoSearch = document.getElementById("anno_search")
+    annoSearch.addEventListener("click",function(event){
+      getPage(annoNowPage,annoPageSize)
+    })
+    let annoLastBtu = document.getElementById("anno_but_last")
+    annoLastBtu.addEventListener("click",function(event){
+      if(annoNowPage<=0){
+        return
+      }
+      else{
+        annoNowPage -= 1
+        getPage(annoNowPage,annoPageSize)
+      }
+    })
+    let annoNextBtu = document.getElementById("anno_but_next")
+    annoNextBtu.addEventListener("click",function(event){
+      if(annoNowPage>=annoMaxPage){
+        return
+      }
+      else{
+        annoNowPage += 1
+        getPage(annoNowPage,annoPageSize)
+      }
+    })
+    let annoPage = document.getElementById("anno_page")
+    annoPage.textContent = annoNowPage
+    let annoCreate = document.getElementById("anno_create")
+    annoCreate.addEventListener("click",function(event){
+      event.preventDefault();
+      let role = localStorage.getItem("role")
+      console.log(role)
+      if(role != 1){
+        alert("Non-administrator")
+        return
+      }
+      window.location.href = "create_announcement.html"
+    })
+
+    function getPage(page,size){
+      let anno_url = API_ANNOUNCEMENT.page
+      if(isEmpty(annoPage.textContent)){
+        anno_url = API_ANNOUNCEMENT.page +`?pageNo=${annoNowPage}&pageSize=${annoPageSize}`
+      }else{
+        anno_url = API_ANNOUNCEMENT.page +`?pageNo=${annoNowPage}&pageSize=${annoPageSize}&message=${annoKey.value}`
+      }
+      axios.get(anno_url, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if(response.data.code === 1){
+          //change current page
+          annoNowPage = response.data.data.current
+          //change max page
+          annoMaxPage = response.data.data.pages
+          //change 
+          annoPage.textContent = response.data.data.current
+          updatePage(response.data.data.records)
+        }
+        else{
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        alert("service error, please wait for 10 mins")
+      });
+    }
+    getPage(1,annoPageSize)
+
+    function updatePage(data){
+      // show announcement
+      const notices = annoContainer.querySelectorAll('.notice');
+      notices.forEach(notice => notice.remove());
+      data.forEach(item => {
+          const noticeDiv = document.createElement('div');
+          noticeDiv.className = 'notice';
+          if(localStorage.getItem("role")==1){
+               noticeDiv.innerHTML = `
+            <h3>${item.title}</h3>
+            <p class="content">${item.content}</p>
+            <div class="meta">Time：${item.createtime}　Administrator：${item.username} <button class="clild-but" anno-id=${item.id}>delete</button></div>
+          `;
+          }
+          else{
+               noticeDiv.innerHTML = `
+            <h3>${item.title}</h3>
+            <p class="content">${item.content}</p>
+            <div class="meta">Time：${item.createtime}　Administrator：${item.username}</div>
+          `;
+          }
+          annoContainer.appendChild(noticeDiv);
+        });
+      // add delete button
+      if(localStorage.getItem("role") == 1){
+        const annoItems = document.querySelectorAll('.clild-but');
+        console.log("annoItems->",annoItems)
+        annoItems.forEach(item => {
+            item.addEventListener('click', () => {
+              deleteAnno(item.getAttribute('anno-id'))
+            });
+          });
+      }
+    }
+    function deleteAnno(id){
+      const url = API_ANNOUNCEMENT.delete +`/${id}`
+      axios.delete(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if(response.data.code === 1){
+          getPage(annoNowPage,annoPageSize)
+        }
+        else{
+          alert(response.data.message)
+        }
+      })
+      .catch(error => {
+        alert("service error, please wait for 10 mins")
+      });
+    }
+    
+    
+ </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>create announcement</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f9fc;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #1E90FF;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    textarea {
+      height: 150px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      background-color: #1E90FF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      background-color: #147acb;
+    }
+
+    .link-btn {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 15px;
+      color: #1E90FF;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .link-btn:hover {
+      text-decoration: underline;
+    }
+  </style>
+  <script src="../axios/axios.min.js"></script>
+  <script src="../config/api.js"></script>
+</head>
+<body>
+
+  <h1>New Announcement</h1>
+
+  <form>
+    <label>Title</label>
+    <input id="createAnnoTitle" type="text" placeholder="your title">
+
+    <label>Username</label>
+    <input id="createAnnoUsername" type="text" placeholder="your username">
+<!-- 
+    <label>发布日期</label>
+    <input type="date" value="2025-04-19"> -->
+
+    <label>Content</label>
+    <textarea id="createAnnoContent" placeholder="input content..."></textarea>
+
+    <button id="createAnno" class="submit-btn">create</button>
+  </form>
+
+  <!-- 跳转按钮 -->
+  <div style="text-align: center;">
+    <a href="notice.html" class="link-btn">← Back to announcement</a><br>
+    <!-- <a href="new_post.html" class="link-btn">📝 去发评论</a> -->
+  </div>
+  <script type="module">
+    import {isEmpty} from '../utils/str.js'
+    let createAnnoTitle = document.getElementById("createAnnoTitle")
+    let createAnnoUsername = document.getElementById("createAnnoUsername")
+    createAnnoUsername.value = localStorage.getItem("username")
+    let createAnnoContent = document.getElementById("createAnnoContent")
+    let createAnno = document.getElementById("createAnno")
+    createAnno.addEventListener("click",function(event){
+      event.preventDefault()
+      if(isEmpty(createAnnoTitle.value)||isEmpty(createAnnoContent.value)||isEmpty(createAnnoUsername.value)){
+        alert("Please complete the information.")
+        return
+      }
+        const loginData = {
+        title:createAnnoTitle.value,
+        content: createAnnoContent.value,
+        username: createAnnoUsername.value,
+        userId: localStorage.getItem("userId")
+      };
+        axios.put(API_ANNOUNCEMENT.create, loginData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+        if(response.data.code === 1){
+          alert("create accouncement successfully")
+        }
+        else{
+          alert("username or password error")
+        }
+      })
+        .catch(error => {
+          alert("service error, please wait for 10 mins")
+        });
+      })
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>发新帖</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f9fc;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #1E90FF;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    textarea {
+      height: 150px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      background-color: #1E90FF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      background-color: #147acb;
+    }
+
+    .link-btn {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 15px;
+      color: #1E90FF;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .link-btn:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>发新帖</h1>
+
+  <form>
+    <label>标题</label>
+    <input type="text" placeholder="请输入帖子标题">
+
+    <label>发帖人</label>
+    <input type="text" placeholder="请输入您的用户名">
+
+    <label>发布日期</label>
+    <input type="date" value="2025-04-19">
+
+    <label>帖子内容</label>
+    <textarea placeholder="请输入帖子的详细内容..."></textarea>
+
+    <button class="submit-btn">发布新帖</button>
+  </form>
+
+  <!-- 跳转按钮 -->
+  <div style="text-align: center;">
+    <a href="forum.html" class="link-btn">← 返回论坛主页</a><br>
+    <!-- <a href="new_post.html" class="link-btn">📝 去发评论</a> -->
+  </div>
+
+</body>
+</html>
