@@ -223,7 +223,6 @@
       // add delete button
       if(localStorage.getItem("role") == 1){
         const annoItems = document.querySelectorAll('.clild-but');
-        console.log("annoItems->",annoItems)
         annoItems.forEach(item => {
             item.addEventListener('click', () => {
               deleteAnno(item.getAttribute('anno-id'))
@@ -232,6 +231,9 @@
       }
     }
     function deleteAnno(id){
+      if(!confirm("Delete this announcement?")){
+        return
+      }
       const url = API_ANNOUNCEMENT.delete +`/${id}`
       axios.delete(url, {
         headers: {

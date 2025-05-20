@@ -16,8 +16,8 @@ const API_ANNOUNCEMENT = {
   delete: `${BASE_URL}/anno/delete`,
 };
 const API_FORUM = {
-  getUser: `${BASE_URL}/user`,
-  getPosts: `${BASE_URL}/posts`,
+  getUserForum: `${BASE_URL}/forum`,
+  delete: `${BASE_URL}/forum/delete`,
   login: `${BASE_URL}/auth/login`,
   logout: `${BASE_URL}/auth/logout`
 };
