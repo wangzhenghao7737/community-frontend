@@ -115,13 +115,13 @@
         alert("Please complete the information.")
         return
       }
-        const loginData = {
+      const loginData = {
         title:createAnnoTitle.value,
         content: createAnnoContent.value,
         username: createAnnoUsername.value,
         userId: localStorage.getItem("userId")
       };
-        axios.put(API_ANNOUNCEMENT.create, loginData, {
+      axios.put(API_ANNOUNCEMENT.create, loginData, {
         headers: {
           'Content-Type': 'application/json'
         }

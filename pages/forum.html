@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>社区论坛</title>
+  <title>Forum</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -71,6 +71,9 @@
       cursor: pointer;
       font-size: 14px;
     }
+    .toggle-btn-del{
+      background-color: red;
+    }
 
     .comments {
       display: none;
@@ -136,19 +139,22 @@
     background-color: #157acb;
   }
   </style>
+  <script src="../config/api.js"></script>
+  <script src="../axios/axios.min.js"></script>
 </head>
 <body>
 
-  <h1>社区论坛</h1>
+  <h1>Forum</h1>
 
   <!-- 🔍 搜索 -->
   <div class="search-bar">
-    <input type="text" placeholder="搜索帖子标题或内容...">
-    <button>搜索</button>
+    <input id="searchMessage" type="text" placeholder="search forum by title or content...">
+    <button id="searchBut">Search</button>
   </div>
 
-  <!-- 📝 帖子1 -->
-  <div class="post">
+  <div id="post-container" class="container">
+   
+    <!-- <div class="post">
     <h3>小区电瓶车停放规范讨论</h3>
     <div class="meta">发起者：李四 | 日期：2025-04-15 | 阅读：142次</div>
     <div class="post-content">
@@ -160,43 +166,158 @@
       <p><strong>王五：</strong>可以找物业沟通一下，我之前提过几次。</p>
     </div>
     <a href="new_post.html" class="comment-btn">发评论</a>
+    </div> -->
   </div>
-
-  <!-- 📝 帖子2 -->
-  <div class="post">
-    <h3>楼道灯坏了</h3>
-    <div class="meta">发起者：王小美 | 日期：2025-04-12 | 阅读：78次</div>
-    <div class="post-content">
-      三单元2楼楼道灯已经坏好几天了，晚上出门不安全，物业能快点修吗？
-    </div>
-    <button class="toggle-btn" onclick="toggleComments(this)">展开评论</button>
-    <div class="comments">
-      <p><strong>管理员：</strong>收到，今天下午安排维修。</p>
-    </div>
-    <a href="new_post.html" class="comment-btn">发评论</a>
-  </div>
-
-  <!-- 📄 分页 -->
+  <!-- 分页 -->
   <div class="pagination">
-    <button>&laquo; 上一页</button>
-    <button class="active">1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>下一页 &raquo;</button>
-    <a href="create_post.html" class="post-btn">➕ 发新帖</a>
+    <button id="lastForum">&laquo;last</button>
+    <button id="showPage" class="active">1</button>
+    <button id="nextForum">next &raquo;</button>
+    <a href="create_post.html" class="post-btn">add forum</a>
 
   </div>
 
-  <script>
-    function toggleComments(button) {
-      const commentBox = button.nextElementSibling;
-      const isVisible = commentBox.style.display === "block";
-      commentBox.style.display = isVisible ? "none" : "block";
-      button.textContent = isVisible ? "展开评论" : "折叠评论";
+  <script type="module">
+    import {isEmpty} from '../utils/str.js'
+    let forumNowPage = 1
+    let forumMaxPage = 1
+    let forumPageSize = 3
+    let searchMessage = document.getElementById("searchMessage")
+    let searchBut = document.getElementById("searchBut")
+    function searchForum(page,pageSize){
+      let url = API_FORUM.page + `?page=${page}&size=${pageSize}`
+      if(!isEmpty(searchMessage.value)){
+        url += `&title=${searchMessage.value}`
+      }
+      axios.get(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if(response.data.code === 1){
+            forumNowPage = response.data.data.current
+            forumMaxPage  = response.data.data.pages
+            showPage.textContent = forumNowPage
+            renderPosts(response.data.data.forums)
+        }
+      })
+      .catch(error => {
+        alert("Fail to get forums page")
+        console.error(error);
+      });
     }
-  </script>
-  <script>
-    alert("forum")
+    searchBut.addEventListener("click",function(event){
+      searchForum(1,forumPageSize)
+    })
+    let lastForum = document.getElementById("lastForum")
+    lastForum.addEventListener("click",function(){
+        if(forumNowPage <= 1){
+          return
+        }
+        forumNowPage -= 1
+        searchForum(forumNowPage,3)
+    })
+    let nextForum = document.getElementById("nextForum")
+    nextForum.addEventListener("click",function(){
+      if(forumNowPage>=forumMaxPage){
+        return
+      }
+      forumNowPage += 1
+      searchForum(forumNowPage,3)
+    })
+    let showPage = document.getElementById("showPage")
+    searchForum(1,3)
+    window.toggleComments = function(button) {
+      const comments = button.nextElementSibling;
+      //show comment
+      if (comments.style.display === "none" || comments.style.display === "") {
+        comments.style.display = "block";
+        button.textContent = "hide comment";
+        const chosedForumId = button.getAttribute('forum-id')
+  
+        let commentData = localStorage.getItem("forumData");
+        if (commentData) {
+          let parsedData = JSON.parse(commentData);
+          const comments = parsedData.find(obj => obj.id == chosedForumId).commentList;
+
+          //which forum we need to insert comments
+          let box = document.querySelector('[data-forumId="'+chosedForumId+'"]');
+          console.log(comments)
+          comments.forEach(post => {
+            const postDiv = document.createElement("div");
+            postDiv.innerHTML=`
+                <p><strong>${post.username}：</strong>${post.comment}</p>
+            `
+            box.appendChild(postDiv);
+          });
+        }
+      } else {
+        comments.style.display = "none";
+        button.textContent = "show comment";
+      }
+    }
+    window.deleteForum = function(button){
+      let id = button.getAttribute("forum-id")
+      if(!confirm("Delete this forum?")){
+        return
+      }
+      let url = API_FORUM.delete+ `/${id}`
+      axios.delete(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if(response.data.code === 1){
+            searchForum(forumNowPage,forumPageSize)
+        }
+      })
+      .catch(error => {
+        alert("Fail to delete forum")
+        console.error(error);
+      });
+    }
+    function renderPosts(posts) {
+      console.log(posts)
+      // save current pages' fourm and comment message
+      localStorage.setItem("forumData", JSON.stringify(posts));
+      const container = document.getElementById("post-container");
+      container.innerHTML = "";
+      posts.forEach(post => {
+        const postDiv = document.createElement("div");
+        postDiv.className = "post";
+        if(localStorage.getItem("role")==1){
+          postDiv.innerHTML=`
+            <h3>${post.title}</h3>
+            <div class="meta">Author：${post.username} | Date：${post.createtime}</div>
+            <div class="post-content">
+              ${post.content}
+            </div>
+            <button class="toggle-btn" forum-id=${post.id} onclick="toggleComments(this)">show comments</button>
+            <div data-forumId="${post.id}" class="comments">
+            </div>
+            <a href="new_post.html?forumId=${post.id}&title=${encodeURIComponent(post.title)}&user=${encodeURIComponent(post.username)}&time=${encodeURIComponent(post.createtime)}&content=${encodeURIComponent(post.content)}" class="comment-btn">add comment</a>
+            <button class="toggle-btn toggle-btn-del" forum-id=${post.id} onclick="deleteForum(this)">delete</button>
+          `
+        }else{
+          postDiv.innerHTML=`
+            <h3>${post.title}</h3>
+            <div class="meta">Author：${post.username} | Date：${post.createtime}</div>
+            <div class="post-content">
+              ${post.content}
+            </div>
+            <button class="toggle-btn" forum-id=${post.id} onclick="toggleComments(this)">show comments</button>
+            <div data-forumId="${post.id} class="comments">
+            </div>
+            <a href="new_post.html" class="comment-btn">add comment</a>
+          `
+        }
+        
+        container.appendChild(postDiv);
+      });
+    }
+
   </script>
 </body>
 </html>

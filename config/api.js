@@ -18,11 +18,11 @@ const API_ANNOUNCEMENT = {
 const API_FORUM = {
   getUserForum: `${BASE_URL}/forum`,
   delete: `${BASE_URL}/forum/delete`,
-  login: `${BASE_URL}/auth/login`,
-  logout: `${BASE_URL}/auth/logout`
+  page: `${BASE_URL}/forum/page`,
+  create: `${BASE_URL}/forum/create`
 };
 const API_COMMENT = {
-  getUser: `${BASE_URL}/user`,
+  create: `${BASE_URL}/comm/create`,
   getPosts: `${BASE_URL}/posts`,
   login: `${BASE_URL}/auth/login`,
   logout: `${BASE_URL}/auth/logout`

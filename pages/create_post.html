@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>发新帖</title>
+  <title>Create new forum</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -74,32 +74,70 @@
       text-decoration: underline;
     }
   </style>
+  <script src="../axios/axios.min.js"></script>
+  <script src="../config/api.js"></script>
 </head>
 <body>
 
-  <h1>发新帖</h1>
+  <h1>Create new forum</h1>
 
   <form>
-    <label>标题</label>
-    <input type="text" placeholder="请输入帖子标题">
-
-    <label>发帖人</label>
-    <input type="text" placeholder="请输入您的用户名">
-
-    <label>发布日期</label>
-    <input type="date" value="2025-04-19">
-
-    <label>帖子内容</label>
-    <textarea placeholder="请输入帖子的详细内容..."></textarea>
-
-    <button class="submit-btn">发布新帖</button>
+    <label>Title</label>
+    <input id="forum_title" type="text" placeholder="input your title">
+    <label>Username</label>
+    <input id="forum_username"  type="text" placeholder="username">
+    <label>Time</label>
+    <input id="forum_time"  type="date" value="2025-04-19">
+    <label>Content</label>
+    <textarea id="forum_content"  placeholder="input the content of you forum..."></textarea>
+    <button id="forum_create" class="submit-btn">create</button>
   </form>
 
   <!-- 跳转按钮 -->
   <div style="text-align: center;">
-    <a href="forum.html" class="link-btn">← 返回论坛主页</a><br>
-    <!-- <a href="new_post.html" class="link-btn">📝 去发评论</a> -->
+    <a href="forum.html" class="link-btn">← back to fourm page</a><br>
+    <!-- <a href="new_post.html" class="link-btn">去发评论</a> -->
   </div>
 
+  <script type="module">
+      import {isEmpty} from '../utils/str.js'
+      let forum_title = document.getElementById("forum_title")
+      let forum_username = document.getElementById("forum_username")
+      forum_username.value = localStorage.getItem("username")
+      let forum_time = document.getElementById("forum_time")
+      let forum_content = document.getElementById("forum_content")
+      let forum_create = document.getElementById("forum_create")
+      forum_create.addEventListener("click",function(event){
+        event.preventDefault()
+        if(isEmpty(forum_title.value)||isEmpty(forum_username.value)||isEmpty(forum_content.value)){
+          alert("Please input information of new forum")
+          return
+        }
+        if(!localStorage.getItem("userId")){
+          return
+        }
+        const forumData = {
+          userid: localStorage.getItem("userId"),
+          title: forum_title.value,
+          username: forum_username.value,
+          content: forum_content.value,
+        };
+        axios.put(API_FORUM.create, forumData, {
+          headers: {
+              'Content-Type': 'application/json'
+             }
+           })
+          .then(response => {
+            if(response.data.data == 1){
+              alert("create "+forum_title.value+" successfully")
+            }else{
+              alert("fail to create new forum")
+            }
+          })
+          .catch(error => {
+            alert("service error, please wait for 10 mins")
+          });
+      })
+  </script>
 </body>
 </html>
