@@ -64,9 +64,10 @@
   <script>
     let username = document.getElementById("username")
     let password = document.getElementById("password")
-    const button = document.getElementById("login")
+    let button = document.getElementById("login")
     button.addEventListener("click",function(event){
       event.preventDefault();
+      button.value = "logging..."
       const loginData = {
         username: username.value,
         password: password.value,

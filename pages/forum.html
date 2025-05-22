@@ -143,30 +143,13 @@
   <script src="../axios/axios.min.js"></script>
 </head>
 <body>
-
   <h1>Forum</h1>
-
   <!-- 🔍 搜索 -->
   <div class="search-bar">
     <input id="searchMessage" type="text" placeholder="search forum by title or content...">
     <button id="searchBut">Search</button>
   </div>
-
   <div id="post-container" class="container">
-   
-    <!-- <div class="post">
-    <h3>小区电瓶车停放规范讨论</h3>
-    <div class="meta">发起者：李四 | 日期：2025-04-15 | 阅读：142次</div>
-    <div class="post-content">
-      最近小区电瓶车乱停放问题严重，有没有可能规划一下车棚位置？
-    </div>
-    <button class="toggle-btn" onclick="toggleComments(this)">展开评论</button>
-    <div class="comments">
-      <p><strong>张三：</strong>支持！我家楼下都快没法走了。</p>
-      <p><strong>王五：</strong>可以找物业沟通一下，我之前提过几次。</p>
-    </div>
-    <a href="new_post.html" class="comment-btn">发评论</a>
-    </div> -->
   </div>
   <!-- 分页 -->
   <div class="pagination">
@@ -176,7 +159,6 @@
     <a href="create_post.html" class="post-btn">add forum</a>
 
   </div>
-
   <script type="module">
     import {isEmpty} from '../utils/str.js'
     let forumNowPage = 1
@@ -235,15 +217,13 @@
         comments.style.display = "block";
         button.textContent = "hide comment";
         const chosedForumId = button.getAttribute('forum-id')
-  
         let commentData = localStorage.getItem("forumData");
         if (commentData) {
           let parsedData = JSON.parse(commentData);
           const comments = parsedData.find(obj => obj.id == chosedForumId).commentList;
-
           //which forum we need to insert comments
           let box = document.querySelector('[data-forumId="'+chosedForumId+'"]');
-          console.log(comments)
+          // console.log(comments)
           comments.forEach(post => {
             const postDiv = document.createElement("div");
             postDiv.innerHTML=`
@@ -279,7 +259,6 @@
       });
     }
     function renderPosts(posts) {
-      console.log(posts)
       // save current pages' fourm and comment message
       localStorage.setItem("forumData", JSON.stringify(posts));
       const container = document.getElementById("post-container");
@@ -308,16 +287,15 @@
               ${post.content}
             </div>
             <button class="toggle-btn" forum-id=${post.id} onclick="toggleComments(this)">show comments</button>
-            <div data-forumId="${post.id} class="comments">
+            <div data-forumId="${post.id}" class="comments">
             </div>
-            <a href="new_post.html" class="comment-btn">add comment</a>
+            <a href="new_post.html?forumId=${post.id}&title=${encodeURIComponent(post.title)}&user=${encodeURIComponent(post.username)}&time=${encodeURIComponent(post.createtime)}&content=${encodeURIComponent(post.content)}" class="comment-btn">add comment</a>
           `
         }
         
         container.appendChild(postDiv);
       });
     }
-
   </script>
 </body>
 </html>
