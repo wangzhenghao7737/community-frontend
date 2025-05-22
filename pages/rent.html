@@ -79,7 +79,7 @@
     }
 
     .info span {
-      display: inline-block;
+      /* display: inline-block; */
       width: 45%;
       font-weight: bold;
       color: #444;
@@ -124,6 +124,8 @@
       background-color: #e0e0e0;
     }
   </style>
+  <script src="../config/api.js"></script>
+  <script src="../axios/axios.min.js"></script>
 </head>
 <body>
 
@@ -131,65 +133,104 @@
 
   <!-- 搜索框 -->
   <div class="search-bar">
-    <input type="text" placeholder="搜索房源...">
-    <button>搜索</button>
+    <input id="searchMessage" type="text" placeholder="house message...">
+    <button id="searchButton">search</button>
   </div>
 
   <!-- 房屋租赁列表 -->
-  <div class="rent-list">
-    <div class="rent-item">
-      <img src="../resource/house.jpeg" alt="户型图片">
-      <h3>2室1厅精装修</h3>
-      <div class="info">
-        <span>家具/家电：         &nbsp;</span><span class="value">全配（空调、冰箱、洗衣机）</span><br>
-        <span>价格：</span><span class="value">¥3000/月</span><br>
-        <span>租赁时间：</span><span class="value">2025年5月 - 2026年5月</span><br>
-        <span>房主联系方式：</span><span class="value">138****8888</span>
-      </div>
-      <div class="contact">
-        <a href="tel:138****8888">联系房主</a>
-      </div>
-    </div>
-
-    <div class="rent-item">
-      <img src="../resource/house.jpeg" alt="户型图片">
-      <h3>3室2厅独立公寓</h3>
-      <div class="info">
-        <span>家具/家电：</span><span class="value">全配（空调、冰箱、洗衣机、电视）</span><br>
-        <span>价格：</span><span class="value">¥5000/月</span><br>
-        <span>租赁时间：</span><span class="value">2025年6月 - 2026年6月</span><br>
-        <span>房主联系方式：</span><span class="value">139****7777</span>
-      </div>
-      <div class="contact">
-        <a href="tel:139****7777">联系房主</a>
-      </div>
-    </div>
-
-    <div class="rent-item">
-      <img src="../resource/house.jpeg" alt="户型图片">
-      <h3>1室1厅小户型</h3>
-      <div class="info">
-        <span>家具/家电：</span><span class="value">家具齐全（空调、冰箱）</span><br>
-        <span>价格：</span><span class="value">¥2000/月</span><br>
-        <span>租赁时间：</span><span class="value">2025年4月 - 2026年4月</span><br>
-        <span>房主联系方式：</span><span class="value">137****6666</span>
-      </div>
-      <div class="contact">
-        <a href="tel:137****6666">联系房主</a>
-      </div>
-    </div>
+  <div id="rentContainer" class="rent-list">
   </div>
 
   <!-- 分页 -->
   <div class="pagination">
-    <button>上一页</button>
-    <button>1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>下一页</button>
+    <button id="rentLast">Last</button>
+    <button id="rentNow">1</button>
+    <button id="rentNext">Next</button>
   </div>
-  <script>
-    alert("rent")
+  <script type="module">
+    import {isEmpty} from '../utils/str.js'
+    window.contactLandloard = function(name,phone){
+      alert("Landloard:"+name+",Phone:"+phone)
+    }
+    let rentMaxPage = 1
+    let rentNowPage = 1
+    let rentPageSize = 4
+    let searchMessage = document.getElementById("searchMessage")
+    let searchButton = document.getElementById("searchButton")
+    searchButton.addEventListener("click",function(){
+      getRentalPage(rentNowPage,rentMaxPage)
+    })
+    let rentNow = document.getElementById("rentNow")
+    rentNow.innerText = rentNowPage
+    let rentLast = document.getElementById("rentLast")
+    rentLast.addEventListener("click",function(){
+      if(rentNowPage<=1){
+        return
+      }
+      rentNowPage -= 1
+      rentNow.innerText = rentNowPage
+      getRentalPage(rentNowPage,rentPageSize)
+    })
+    let rentNext = document.getElementById("rentNext")
+    rentNext.addEventListener("click",function(){
+      if(rentNowPage >= rentMaxPage){
+        return
+      }
+      rentNowPage +=1
+      rentNow.innerText = rentNowPage
+      getRentalPage(rentNowPage,rentPageSize)
+    })
+    let rentContainer = document.getElementById("rentContainer")
+    function getRentalPage(page,size){
+      let url = API_RENTAL.page + `?pageNo=${page}&pageSize=${size}`
+      if(!isEmpty(searchMessage.value)){
+        url += `&message=${searchMessage.value}`
+      }
+      axios.get(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if(response.data.code === 1){
+                rentMaxPage = response.data.data.pages
+            renderPage(response.data.data.records)
+        }else{
+          alert("Servive error,Please try again later")
+          return
+        }
+      })
+      .catch(error => {
+        alert("Fail to get rental page")
+        console.error(error);
+      });
+    }
+    function renderPage(data){
+      // console.log(data)
+      rentContainer.innerHTML = ''; // 清空旧内容
+      data.forEach(item => {
+        const rentItem = document.createElement('div');
+        rentItem.className = 'rent-item';
+        rentItem.innerHTML = `
+          <img src="../resource/house.jpeg" alt="photo">
+          <h3>${item.address}</h3>
+          <div class="info">
+            <span>price：&nbsp;</span><span class="value">${item.price}</span><br>
+            <hr>
+            <span>description：</span><span class="value">${item.description}</span><br>
+            <hr>
+            <span>time：</span><span class="value">${item.createtime}</span><br>
+            <hr>
+            <span>landloard：</span><span class="value">${item.username}</span>
+          </div>
+          <div class="contact">
+            <a onclick="contactLandloard('${item.username}','${item.phone}')">contact</a>
+          </div>
+        `;
+        rentContainer.appendChild(rentItem);
+      });
+    }
+    getRentalPage(rentNowPage,rentPageSize )
   </script>
 </body>
 </html>

@@ -67,7 +67,7 @@
     let button = document.getElementById("login")
     button.addEventListener("click",function(event){
       event.preventDefault();
-      button.value = "logging..."
+      button.innerText = "Logging..."
       const loginData = {
         username: username.value,
         password: password.value,

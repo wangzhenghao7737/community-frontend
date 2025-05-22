@@ -28,10 +28,8 @@ const API_COMMENT = {
   logout: `${BASE_URL}/auth/logout`
 };
 const API_RENTAL = {
-  getUser: `${BASE_URL}/user`,
-  getPosts: `${BASE_URL}/posts`,
-  login: `${BASE_URL}/auth/login`,
-  logout: `${BASE_URL}/auth/logout`
+  page: `${BASE_URL}/rental/page`,
+  getPosts: `${BASE_URL}/rental/create`
 };
 
 // 导出常量和对象
